@@ -2,14 +2,18 @@
 
 ClassNoise allows modeling, generating and validating data with class corruption. It provides a framework to design class noise models based on provided datasets allowing the generation of synthetic datasets. This package empower the creation of controlled experimental settings to evaluate class noise impact on supervised learning.
 
-## Installation
+## Installation and load
 
 The ClassNoise installation requires the `install_github` function from the package `remotes`.
 
 ``` r
+# Installation and load of the 'remotes' package 
 install.packages("remotes")
 library(remotes)
+# Installation of 'classnoise'
 install_github("dmgalicia/classnoise")
+# Load of 'classnoise'
+library(classnoise)
 ```
 
 ## Suggested workflow
