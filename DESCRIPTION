@@ -12,17 +12,18 @@ Authors@R: c(
     role = c("aut"), comment = c(ORCID = "0000-0002-0708-9875")),
     person("Xavier", "Limón", email = "hlimon@uv.mx", 
     role = c("aut"), comment = c(ORCID = "0000-0003-4654-636X")))
-Description: A framework to design class noise models based on datasets you provide. 
-    Generate synthetic datasets based on noise models and validate them using information
-    metrics. This package empower the creation of controlled experimental settings to 
-    evaluate noise impact on learning tasks.
+Description: A package to design class noise models based on datasets you 
+    provide. Generate synthetic datasets based on noise models and validate 
+    them using information metrics. This package empower the creation of 
+    controlled experimental settings to evaluate noise impact on learning tasks.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports: 
     bnlearn (>= 4.8.3),
-    dplyr (>= 1.1.2)
+    dplyr (>= 1.1.2),
+    Rgraphviz (>= 2.44.0)
 Depends: 
     R (>= 4.3)
 LazyData: true
