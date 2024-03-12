@@ -12,7 +12,7 @@
 #' @param noise A number between 0 and 1 representing the noise level.
 #' @param class.idx An optional numeric index for the position of the class
 #' variable in the data frame. It is assumed the last variable in the data.
-#' @param net A \code{bn} object representing the structure of the golden
+#' @param network A \code{bn} object representing the structure of the golden
 #' Bayesian Network of the domain.
 #'
 #' @return A list with a \code{bn} object representing the structure and a
@@ -29,9 +29,9 @@
 #' # Running the method with a predefined network
 #' network <- bnlearn::hc(qb)
 #' fit <- bnlearn::bn.fit(network, qb)
-#' model <- NCAR(data = qb, noise = 0.1, net = fit)
+#' model <- NCAR(data = qb, noise = 0.1, network = fit)
 #' model$parameters$Error
-NCAR <- function(data, noise, class.idx = ncol(data), net = NULL){
+NCAR <- function(data, noise, class.idx = ncol(data), network = NULL){
 
   if(!is.data.frame(data)){
     stop("Data must be a data frame.")
@@ -51,7 +51,7 @@ NCAR <- function(data, noise, class.idx = ncol(data), net = NULL){
   data[, "Error"] <- factor(rep(c("False", "True"), length.out = nrow(data)),levels = c("False", "True"))
   data[, "ObservedClass"] <- data[, "Class"]
 
-  if(is.null(net)){
+  if(is.null(network)){
 
     bl <- rbind(data.frame(from = names(data), to = rep("ObservedClass", times = ncol(data))),
                 data.frame(from = names(data), to = rep("Error", times = ncol(data))),
@@ -59,16 +59,16 @@ NCAR <- function(data, noise, class.idx = ncol(data), net = NULL){
                 data.frame(from = rep("ObservedClass", times = ncol(data)), to = names(data)),
                 data.frame(from = rep("Error", times = ncol(data)), to = names(data)))
 
-    struct <- bnlearn::hc(data, restart = 100, perturb = 2, blacklist = bl)
+    struct <- bnlearn::hc(data, restart = 100, perturb = 10, blacklist = bl)
 
     bn.arcs <- bnlearn::arcs(struct)
   }else{
-    if(!all(bnlearn::nodes(net) %in% names(data))){
-      stop("The net data frame does not contain the same variables as the provided data.")
+    if(!all(bnlearn::nodes(network) %in% names(data))){
+      stop("The network data frame does not contain the same variables as the provided data.")
     }
 
-    struct <- bnlearn::empty.graph(nodes = c(bnlearn::nodes(net), "Error", "ObservedClass"))
-    bn.arcs <- bnlearn::arcs(net)
+    struct <- bnlearn::empty.graph(nodes = c(bnlearn::nodes(network), "Error", "ObservedClass"))
+    bn.arcs <- bnlearn::arcs(network)
   }
 
   noise.arcs <- data.frame(from = c("Class", "Error"), to = c("ObservedClass", "ObservedClass"))
@@ -89,7 +89,7 @@ NCAR <- function(data, noise, class.idx = ncol(data), net = NULL){
   dimnames(cpt.oc) <- oc.names
   param$ObservedClass <- cpt.oc
 
-  list(struct = struct, parameters = param)
+  list(structure = struct, parameters = param)
 }
 
 
@@ -111,7 +111,7 @@ NCAR <- function(data, noise, class.idx = ncol(data), net = NULL){
 #' number is provided all clases have the same probability of error
 #' @param class.idx An optional numeric index for the position of the class
 #' variable in the data frame. It is assumed the last variable in the data.
-#' @param net A \code{bn} object representing the structure of the golden
+#' @param network A \code{bn} object representing the structure of the golden
 #' Bayesian Network of the domain.
 #'
 #' @return A list with a \code{bn} object representing the structure and a
@@ -129,9 +129,9 @@ NCAR <- function(data, noise, class.idx = ncol(data), net = NULL){
 #' # Running the method with a predefined network
 #' network <- bnlearn::hc(qb)
 #' fit <- bnlearn::bn.fit(network, qb)
-#' model <- NAR(data = qb, noise = c(0.5, 0), net = fit)
+#' model <- NAR(data = qb, noise = c(0.5, 0), network = fit)
 #' model$parameters$Error
-NAR <- function(data, noise, class.idx = ncol(data), net = NULL){
+NAR <- function(data, noise, class.idx = ncol(data), network = NULL){
 
   if(!is.data.frame(data)){
     stop("Data must be a data frame.")
@@ -150,7 +150,7 @@ NAR <- function(data, noise, class.idx = ncol(data), net = NULL){
   data[, "Error"] <- factor(rep(c("False", "True"), length.out = nrow(data)),levels = c("False", "True"))
   data[, "ObservedClass"] <- data[, "Class"]
 
-  if(is.null(net)){
+  if(is.null(network)){
 
     bl <- rbind(data.frame(from = names(data), to = rep("ObservedClass", times = ncol(data))),
                 data.frame(from = names(data), to = rep("Error", times = ncol(data))),
@@ -158,16 +158,16 @@ NAR <- function(data, noise, class.idx = ncol(data), net = NULL){
                 data.frame(from = rep("ObservedClass", times = ncol(data)), to = names(data)),
                 data.frame(from = rep("Error", times = ncol(data)), to = names(data)))
 
-    struct <- bnlearn::hc(data, blacklist = bl)
+    struct <- bnlearn::hc(data, restart = 100, perturb = 10, blacklist = bl)
 
     bn.arcs <- bnlearn::arcs(struct)
   }else{
-    if(!all(bnlearn::nodes(net) %in% names(data))){
-      stop("The net data frame does not contain the same variables as the provided data.")
+    if(!all(bnlearn::nodes(network) %in% names(data))){
+      stop("The network data frame does not contain the same variables as the provided data.")
     }
 
-    struct <- bnlearn::empty.graph(nodes = c(bnlearn::nodes(net), "Error", "ObservedClass"))
-    bn.arcs <-  bnlearn::arcs(net)
+    struct <- bnlearn::empty.graph(nodes = c(bnlearn::nodes(network), "Error", "ObservedClass"))
+    bn.arcs <-  bnlearn::arcs(network)
   }
 
   noise.arcs <- data.frame(from = c("Class", "Error", "Class"),
@@ -206,7 +206,7 @@ NAR <- function(data, noise, class.idx = ncol(data), net = NULL){
   dimnames(cpt.oc) <- oc.names
   param$ObservedClass <- cpt.oc
 
-  list(struct = struct, parameters = param)
+  list(structure = struct, parameters = param)
 }
 
 
@@ -232,7 +232,7 @@ NAR <- function(data, noise, class.idx = ncol(data), net = NULL){
 #' is provided all possible scenarios have the same probability of error
 #' @param class.idx An optional numeric index for the position of the class
 #' variable in the data frame. It is assumed the last variable in the data.
-#' @param net A \code{bn} object representing the structure of the golden
+#' @param network A \code{bn} object representing the structure of the golden
 #' Bayesian Network of the domain.
 #'
 #' @return A list with a \code{bn} object representing the structure and a
@@ -256,9 +256,9 @@ NAR <- function(data, noise, class.idx = ncol(data), net = NULL){
 #' network <- bnlearn::hc(qb)
 #' fit <- bnlearn::bn.fit(network, qb)
 #' model <- NNAR(data = qb, attrib.set = c("IR"),
-#'   noise = c(0.4, 0, 0.2, 0, 0.1, 0.3), net = fit)
+#'   noise = c(0.4, 0, 0.2, 0, 0.1, 0.3), network = fit)
 #' model$parameters$Error
-NNAR <- function(data, attrib.set, noise, class.idx = ncol(data), net = NULL){
+NNAR <- function(data, attrib.set, noise, class.idx = ncol(data), network = NULL){
 
   if(!is.data.frame(data)){
     stop("Data must be a data frame.")
@@ -283,7 +283,7 @@ NNAR <- function(data, attrib.set, noise, class.idx = ncol(data), net = NULL){
   data[, "Error"] <- factor(rep(c("False", "True"), length.out = nrow(data)),levels = c("False", "True"))
   data[, "ObservedClass"] <- data[, "Class"]
 
-  if(is.null(net)){
+  if(is.null(network)){
 
     bl <- rbind(data.frame(from = names(data), to = rep("ObservedClass", times = ncol(data))),
                 data.frame(from = names(data), to = rep("Error", times = ncol(data))),
@@ -291,16 +291,16 @@ NNAR <- function(data, attrib.set, noise, class.idx = ncol(data), net = NULL){
                 data.frame(from = rep("ObservedClass", times = ncol(data)), to = names(data)),
                 data.frame(from = rep("Error", times = ncol(data)), to = names(data)))
 
-    struct <- bnlearn::hc(data, blacklist = bl)
+    struct <- bnlearn::hc(data, restart = 100, perturb = 10, blacklist = bl)
 
     bn.arcs <- bnlearn::arcs(struct)
   }else{
-    if(!all(bnlearn::nodes(net) %in% names(data))){
-      stop("The net data frame does not contain the same variables as the provided data.")
+    if(!all(bnlearn::nodes(network) %in% names(data))){
+      stop("The network data frame does not contain the same variables as the provided data.")
     }
 
-    struct <- bnlearn::empty.graph(nodes = c(bnlearn::nodes(net), "Error", "ObservedClass"))
-    bn.arcs <- bnlearn::arcs(net)
+    struct <- bnlearn::empty.graph(nodes = c(bnlearn::nodes(network), "Error", "ObservedClass"))
+    bn.arcs <- bnlearn::arcs(network)
   }
 
   noise.arcs <- data.frame(from = c("Class", "Error", "Class"), to = c("ObservedClass", "ObservedClass", "Error"))
@@ -345,5 +345,5 @@ NNAR <- function(data, attrib.set, noise, class.idx = ncol(data), net = NULL){
   dimnames(cpt.oc) <- oc.names
   param$ObservedClass <- cpt.oc
 
-  list(struct = struct, parameters = param)
+  list(structure = struct, parameters = param)
 }

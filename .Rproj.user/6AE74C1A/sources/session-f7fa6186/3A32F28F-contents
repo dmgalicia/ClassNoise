@@ -1,9 +1,0 @@
-library(RWeka)
-library(bnlearn)
-
-df <- read.arff("D:/Doctorado/Séptimo Semestre/TemasSelectosComputoEvolutivo/UCI/australian.arff")
-
-model <- bnlearn::hc(df)
-plot(model)
-fit <- bn.fit(model, df)
-fit
