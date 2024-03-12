@@ -21,6 +21,12 @@
 #' result$idx
 inconsistency <- function(data, class.idx = ncol(data)){
 
+  if(all(c("Class", "ObservedClass", "Error") %in% names(data))){
+    warning("The 'Error' and 'Class' variables are avoided to calculate the percentage of inconsistent examples.")
+    data[,"Error"] <- NULL
+    data[,"Class"] <- NULL
+    class.idx = ncol(data)
+  }
   if(!is.data.frame(data)){
     stop("Data must be a data frame.")
   }
