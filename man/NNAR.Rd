@@ -4,7 +4,7 @@
 \alias{NNAR}
 \title{Noisy Not At Radom (NNAR) model}
 \usage{
-NNAR(data, attrib.set, noise, class.idx = ncol(data), net = NULL)
+NNAR(data, attrib.set, noise, class.idx = ncol(data), network = NULL)
 }
 \arguments{
 \item{data}{A data frame containing categorical variables.}
@@ -19,7 +19,7 @@ is provided all possible scenarios have the same probability of error}
 \item{class.idx}{An optional numeric index for the position of the class
 variable in the data frame. It is assumed the last variable in the data.}
 
-\item{net}{A \code{bn} object representing the structure of the golden
+\item{network}{A \code{bn} object representing the structure of the golden
 Bayesian Network of the domain.}
 }
 \value{
@@ -56,6 +56,6 @@ model$parameters$Error
 network <- bnlearn::hc(qb)
 fit <- bnlearn::bn.fit(network, qb)
 model <- NNAR(data = qb, attrib.set = c("IR"),
-  noise = c(0.4, 0, 0.2, 0, 0.1, 0.3), net = fit)
+  noise = c(0.4, 0, 0.2, 0, 0.1, 0.3), network = fit)
 model$parameters$Error
 }

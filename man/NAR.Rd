@@ -4,7 +4,7 @@
 \alias{NAR}
 \title{Noise At Random (NAR) model}
 \usage{
-NAR(data, noise, class.idx = ncol(data), net = NULL)
+NAR(data, noise, class.idx = ncol(data), network = NULL)
 }
 \arguments{
 \item{data}{A data frame containing the domain variables.}
@@ -16,7 +16,7 @@ number is provided all clases have the same probability of error}
 \item{class.idx}{An optional numeric index for the position of the class
 variable in the data frame. It is assumed the last variable in the data.}
 
-\item{net}{A \code{bn} object representing the structure of the golden
+\item{network}{A \code{bn} object representing the structure of the golden
 Bayesian Network of the domain.}
 }
 \value{
@@ -45,6 +45,6 @@ model$parameters$Error
 # Running the method with a predefined network
 network <- bnlearn::hc(qb)
 fit <- bnlearn::bn.fit(network, qb)
-model <- NAR(data = qb, noise = c(0.5, 0), net = fit)
+model <- NAR(data = qb, noise = c(0.5, 0), network = fit)
 model$parameters$Error
 }
