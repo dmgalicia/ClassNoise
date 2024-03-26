@@ -200,7 +200,7 @@ noiseLVL <- function(data){
     stop("Data must be a data frame.")
   }
   if(!all(c("Error", "Class", "ObservedClass") %in% names(data))){
-    stop("The dataset does not contain the columns to estimate the noise level.")
+    stop("The dataset was not generate with ClassNoise package. It does not contain the column to estimate the noise level.")
   }
 
   r <- data[data$Error == "True",] |> nrow()
