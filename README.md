@@ -11,9 +11,9 @@ The ClassNoise installation requires the `install_github` function from the pack
 install.packages("remotes")
 library(remotes)
 # Installation of 'classnoise'
-install_github("dmgalicia/classnoise")
-# Load of 'classnoise'
-library(classnoise)
+install_github("dmgalicia/ClassNoise")
+# Load of 'ClassNoise'
+library(ClassNoise)
 ```
 
 ## Suggested workflow
