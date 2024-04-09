@@ -204,7 +204,7 @@ noiseLVL <- function(data){
   }
 
   r <- data[data$Error == "True",] |> nrow()
-  r <- (r * 100) / nrow(data)
+  r <- r / nrow(data)
 
   r
 }
