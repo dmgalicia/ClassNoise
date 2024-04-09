@@ -1,6 +1,6 @@
 # ClassNoise Package
 
-ClassNoise allows modeling, generating and validating data with class corruption. It provides a framework to design class noise models based on provided datasets allowing the generation of synthetic datasets. This package empower the creation of controlled experimental settings to evaluate class noise impact on supervised learning.
+ClassNoise allows modeling, generating and validating data with class noise. It provides a framework to design class noise models based on provided datasets allowing the generation of synthetic datasets. This package empower the creation of controlled experimental settings to evaluate class noise impact on supervised learning.
 
 ## Installation and load
 
